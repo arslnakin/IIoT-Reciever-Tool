@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IIoT Receiver Tool</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+
+    <!-- TABS -->
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+
+      <!-- TAB 1 : MODBUS -->
+      <widget class="QWidget" name="modbusTab">
+       <attribute name="title">
+        <string>Modbus</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="modbusLayout">
+
+        <!-- Connection Row -->
+        <item>
+         <layout class="QHBoxLayout" name="modbusConnLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Connection Type:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="modbusConnType">
+            <item>
+             <property name="text">
+              <string>TCP</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>RTU</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>IP:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="modbusIpEdit">
+            <property name="text">
+             <string>127.0.0.1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Port:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="modbusPortEdit">
+            <property name="text">
+             <string>502</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>COM:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="modbusComCombo">
+            <item>
+             <property name="text">
+              <string>COM1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>COM2</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Baud:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="modbusBaudCombo">
+            <item>
+             <property name="text">
+              <string>9600</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>19200</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>115200</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="modbusConnectBtn">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Settings Row -->
+        <item>
+         <layout class="QHBoxLayout" name="modbusSettingsLayout">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Function:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="modbusFuncCombo">
+            <item>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Start Address:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="modbusAddrEdit">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Count:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="modbusCountEdit">
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Slave ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="modbusSlaveEdit">
+            <property name="text">
+             <string>1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="modbusPollChk">
+            <property name="text">
+             <string>Polling</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="modbusPollMsSpin">
+            <property name="suffix">
+             <string> ms</string>
+            </property>
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="value">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Table -->
+        <item>
+         <widget class="QTableWidget" name="modbusTable">
+          <property name="columnCount">
+           <number>4</number>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>120</number>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>Address</string>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>Dec</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Hex</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Binary</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>BB</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+
+       </layout>
+      </widget>
+
+      <!-- TAB 2 : MQTT -->
+      <widget class="QWidget" name="mqttTab">
+       <attribute name="title">
+        <string>MQTT</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="mqttLayout">
+
+        <!-- Broker Row -->
+        <item>
+         <layout class="QHBoxLayout" name="mqttConnLayout">
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Broker:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="mqttBrokerEdit">
+            <property name="text">
+             <string>localhost</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Port:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="mqttPortEdit">
+            <property name="text">
+             <string>1883</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="mqttUserEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Password:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="mqttPassEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="mqttConnectBtn">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Publish -->
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Publish</string>
+          </property>
+          <layout class="QHBoxLayout" name="mqttPubLayout">
+           <item>
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Topic:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="mqttPublishTopicEdit"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Payload:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="mqttPublishPayloadEdit"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="mqttPublishBtn">
+             <property name="text">
+              <string>Publish</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+
+        <!-- Subscribe -->
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Subscribe</string>
+          </property>
+          <layout class="QVBoxLayout" name="mqttSubLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLabel" name="label_16">
+               <property name="text">
+                <string>Topic:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="mqttSubscribeTopicEdit"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mqttSubscribeBtn">
+               <property name="text">
+                <string>Subscribe</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="mqttMessagesTable"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+
+       </layout>
+      </widget>
+
+      <!-- TAB 3 : OPC-UA -->
+      <widget class="QWidget" name="opcuaTab">
+       <attribute name="title">
+        <string>OPC-UA</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="opcuaLayout">
+
+        <!-- Connection Row -->
+        <item>
+         <layout class="QHBoxLayout" name="opcuaConnLayout">
+          <item>
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Endpoint:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opcuaEndpointEdit">
+            <property name="text">
+             <string>opc.tcp://localhost:4840</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opcuaUserEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Password:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opcuaPassEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="opcuaConnectBtn">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Splitter -->
+        <item>
+         <layout class="QHBoxLayout" name="opcuaMainLayout">
+          <item>
+           <widget class="QTreeView" name="opcuaTreeView">
+            <property name="minimumWidth">
+             <number>250</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="opcuaRightLayout">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Node Value:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="opcuaValueEdit" />
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="opcuaWriteLayout">
+              <item>
+               <widget class="QLineEdit" name="opcuaWriteEdit"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="opcuaWriteBtn">
+                <property name="text">
+                 <string>Write</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="PlotWidget" name="opcuaPlot" native="true">
+              <property name="minimumHeight">
+               <number>200</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+
+       </layout>
+      </widget>
+
+     </widget>
+    </item>
+
+    <!-- Log -->
+    <item>
+     <widget class="QTextEdit" name="logEdit">
+      <property name="maximumHeight">
+       <number>100</number>
+      </property>
+      <property name="placeholderText">
+       <string>Status / Log messages...</string>
+      </property>
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+
+  <!-- Menu Bar -->
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>900</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+    <addaction name="actionLoad"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+
+  <action name="actionSave">
+   <property name="text">
+    <string>Save Config</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load Config</string>
+   </property>
+  </action>
+
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
