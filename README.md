@@ -1,4 +1,4 @@
-# IIoT Reciever Tool – PyQt6 Modbus / MQTT / OPC-UA Masaüstü Uygulaması
+# IIoT Reciever Tool – Modbus / MQTT / OPC-UA Veri Alma Masaüstü Uygulaması
 
 ## Genel Bakış
 
