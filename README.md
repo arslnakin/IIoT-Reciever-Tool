@@ -159,8 +159,6 @@ IIOT Reciever Software/
 │   ├───modbus_test_server.py
 │   ├───mqtt_live_server.py
 │   ├───opcua_test_server.py
-│   └───...
-├───.venv/                  # Sanal ortam dizini
 ├───build/                  # PyInstaller build çıktıları
 ├───dist/                   # PyInstaller dağıtım çıktıları
 └───README.md               # Bu README dosyası
