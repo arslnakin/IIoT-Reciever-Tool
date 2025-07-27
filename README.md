@@ -166,8 +166,8 @@ IIOT Reciever Software/
 
 ## Katkıda Bulunma
 
-Katkılarınızı memnuniyetle karşılıyoruz! Bir hata bulursanız veya yeni bir özellik önermek isterseniz, lütfen bir "issue" açın veya bir "pull request" gönderin.
+Katkılarınızı memnuniyetle karşılıyorum! Bir hata bulursanız veya yeni bir özellik önermek isterseniz, lütfen bir "issue" açın veya bir "pull request" gönderin.
 
 ## Lisans
 
-Bu proje MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın (eğer varsa, yoksa eklenmelidir).
+Bu proje MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın 
