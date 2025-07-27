@@ -17,7 +17,8 @@ class OpcUaWorker(QThread):
         super().__init__()
         self.url, self.user, self.pwd = url, user, pwd
         self.loop = asyncio.new_event_loop()
-        self.client = None
+        self.client = Client(self.url)
+
         self.graph_sub, self.graph_sub_handle = None, None
         self.selected_node = None
 

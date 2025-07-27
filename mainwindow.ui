@@ -474,6 +474,107 @@
           </item>
          </layout>
         </item>
+        <!-- Security Row-->
+        <item>
+         <layout class="QHBoxLayout" name="opcuaSecurityLayout">
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Security Policy:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="opcuaSecurityPolicyCombo">
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Basic256Sha256</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aes128_Sha256_RsaOaep</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aes256_Sha256_RsaPss</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Security Mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="opcuaSecurityModeCombo">
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sign</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SignAndEncrypt</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <!-- Certificate Row-->
+        <item>
+         <layout class="QHBoxLayout" name="opcuaCertLayout">
+          <item>
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Certificate:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opcuaCertEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="opcuaCertBtn">
+            <property name="text">
+             <string>Browse...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Private Key:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opcuaKeyEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="opcuaKeyBtn">
+            <property name="text">
+             <string>Browse...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
 
         <!-- Splitter -->
         <item>
