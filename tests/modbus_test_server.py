@@ -41,7 +41,7 @@ def run_modbus_server():
     context = ModbusServerContext(slaves=store, single=True)
     context_holder = context
 
-    address = ("127.0.0.4", 5000)
+    address = ("127.0.0.4", 502)
     print(f"Modbus TCP live server {address} starting...")
     # Güncelleyici thread'i başlat
     threading.Thread(target=updating_writer, daemon=True).start()

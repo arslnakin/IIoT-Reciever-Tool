@@ -6,7 +6,8 @@ from PyQt6 import uic, QtCore
 
 from protocols.modbus_handler import ModbusHandler
 from protocols.mqtt_handler import MqttHandler
-from opc_ua_handler import OpcUaHandler
+from protocols.opc_ua_handler import OpcUaHandler
+from protocols.scanner_handler import ScannerHandler
 
 Ui_MainWindow, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), "mainwindow.ui"))
 
@@ -18,7 +19,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Protokol handler'ları
         self.modbus_handler = ModbusHandler(self)
         self.mqtt_handler   = MqttHandler(self)
-        self.opcua_handler  = OpcUaHandler()
+        self.opcua_handler  = OpcUaHandler(self)
+        self.scanner_handler = ScannerHandler(self)
 
         # OPC-UA Plotting
         self.opcua_plot_data_x = []
@@ -39,9 +41,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Log fonksiyonu
         self.modbus_handler.log_message.connect(self.append_log)
         self.mqtt_handler.log_message.connect(self.append_log)
-        self.opcua_handler.connection_status.connect(self.append_log)
-        self.opcua_handler.node_tree_updated.connect(self.update_opcua_tree_view)
-        self.opcua_handler.node_value_updated.connect(self.update_opcua_node_value)
+        self.opcua_handler.log_message.connect(self.append_log)
+        self.scanner_handler.log_message.connect(self.append_log)
 
         # UI Ayarları
         self.opcuaValueEdit.setReadOnly(True)
@@ -56,7 +57,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             cfg = {
                 "modbus": self.modbus_handler.serialize(),
                 "mqtt"  : self.mqtt_handler.serialize(),
-                "opcua" : self.opcua_handler.serialize()
+                "opcua" : self.opcua_handler.serialize(),
+                "scanner": self.scanner_handler.serialize()
             }
             with open(file, "w", encoding="utf-8") as f:
                 json.dump(cfg, f, indent=2)
@@ -70,6 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.modbus_handler.deserialize(cfg.get("modbus", {}))
             self.mqtt_handler.deserialize(cfg.get("mqtt", {}))
             self.opcua_handler.deserialize(cfg.get("opcua", {}))
+            self.scanner_handler.deserialize(cfg.get("scanner", {}))
             QMessageBox.information(self, "Bilgi", "Ayarlar yüklendi.")
 
     def update_opcua_tree_view(self, model):

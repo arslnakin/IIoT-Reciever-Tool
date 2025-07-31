@@ -1,173 +1,103 @@
-# IIoT Reciever Tool – Modbus / MQTT / OPC-UA Veri Alma Masaüstü Uygulaması
+# IIoT Alıcı Aracı (IIoT Receiver Tool)
 
-## Genel Bakış
+Bu proje, Endüstriyel Nesnelerin İnterneti (IIoT) alanında sıkça kullanılan iletişim protokollerini (OPC UA, Modbus, MQTT) test etmek, izlemek ve veri alışverişi yapmak için geliştirilmiş, PyQt6 tabanlı bir masaüstü uygulamasıdır.
 
-Bu proje, Endüstriyel Nesnelerin İnterneti (IIoT) protokolleri olan Modbus, MQTT ve OPC-UA ile etkileşim kurmak için tasarlanmış bir masaüstü test aracıdır. PyQt6 kullanılarak geliştirilen bu uygulama, kullanıcıların farklı IIoT cihazları ve sistemleriyle kolayca bağlantı kurmasını, veri okumasını, yazmasını ve izlemesini sağlayan sezgisel bir grafik kullanıcı arayüzü (GUI) sunar.
 
-## Özellikler
+*(Buraya uygulamanın bir ekran görüntüsü eklenebilir)*
 
-*   **Modbus TCP/RTU Desteği:**
-    *   Coil, Discrete Input, Holding Register ve Input Register okuma/yazma işlemleri.
-    *   Birden fazla Modbus cihazına aynı anda bağlanma yeteneği.
-    *   Özelleştirilebilir bağlantı ayarları (IP, Port, Unit ID, Baudrate, Parity vb.).
-*   **MQTT İstemci:**
-    *   MQTT Broker'a bağlanma ve bağlantıyı kesme.
-    *   Belirli konulara (topic) abone olma ve mesaj yayınlama.
-    *   QoS (Quality of Service) seviyesi ve Retain bayrağı desteği.
-    *   Gelen ve giden mesajları görüntüleme.
-*   **OPC UA İstemci:**
-    *   OPC UA Sunucularına güvenli bağlantı.
-    *   Sunucu adres alanını (address space) keşfetme.
-    *   Node'ları okuma ve yazma.
-    *   Abonelikler aracılığıyla veri değişikliklerini izleme.
+## ✨ Temel Özellikler
 
-## Ekran Görüntüleri
+Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
 
-**Modbus Sekmesi**
+-   **🌐 Ağ Tarayıcı (Network Scanner):**
+    -   Belirtilen bir IP aralığındaki (`192.168.1.0/24` gibi) aktif cihazları tespit eder.
+    -   Cihazların canlı olup olmadığını `ping` ile kontrol ederek tarama süresini optimize eder.
+    -   Yaygın IIoT portlarının (Modbus: 502, OPC UA: 4840, MQTT: 1883 vb.) açık olup olmadığını tarar.
+    -   Bulunan açık portları ve potansiyel servisleri bir tabloda listeler.
 
-![Modbus Arayüzü](imgs/modbus_page.png)
+-   **📈 OPC UA İstemcisi:**
+    -   Bir OPC UA sunucusuna bağlanır.
+    -   Sunucunun adres alanını (node'lar) bir ağaç yapısında gezinmenizi sağlar.
+    -   Bir node'a tıklandığında anlık değerini okur.
+    -   Bir node'a **çift tıklandığında** o node'un değer değişikliklerine abone olur ve gelen veriyi **gerçek zamanlı bir grafikte** çizer.
+    -   Seçili node'a yeni bir değer yazma imkanı sunar.
 
-**MQTT Sekmesi**
+-   **🔩 Modbus İstemcisi:**
+    -   **Modbus TCP** ve **Modbus RTU** (seri port) protokollerini destekler.
+    -   Belirtilen aralıklarla (polling) bir cihazdan veri okur.
+    -   Okunan register/coil değerlerini adresleriyle birlikte bir tabloda gösterir (Decimal, Hex, Binary).
 
-![MQTT Arayüzü](imgs/mqtt_page.png)
+-   **📨 MQTT İstemcisi:**
+    -   Bir MQTT Broker'ına bağlanır.
+    -   Belirtilen bir konuya (topic) abone olarak gelen mesajları dinler.
+    -   Gelen mesajları zaman damgası, konu ve içerik (payload) olarak bir tabloda listeler.
+    -   İstenilen bir konuya mesaj yayınlama (publish) imkanı sunar.
 
-**OPC-UA Sekmesi**
+-   **💾 Yapılandırma Yönetimi:**
+    -   Tüm sekmelerdeki bağlantı ayarlarını tek bir JSON dosyasına kaydedebilir ve daha sonra geri yükleyebilirsiniz.
 
-![OPC-UA Arayüzü](imgs/opcua_page.png)
+## 🚀 Kurulum ve Başlatma
 
-## Hızlı Başlangıç
-
-Uygulamayı yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
-
-### Önkoşullar
-
-*   Python 3.8 veya üzeri
-*   `pip` (Python paket yöneticisi)
-
-### Kurulum
-
-1.  Projeyi klonlayın:
+1.  **Depoyu Klonlayın:**
     ```bash
-    git clone https://github.com/arslnakin/IIoT-Reciever-Software.git
-    cd IIoT-Reciever-Software
-    ```
-2.  Bir sanal ortam oluşturun ve etkinleştirin:
-    *   **Windows:**
-        ```bash
-        python -m venv venv
-        .\venv\Scripts\activate
-        ```
-    *   **macOS/Linux:**
-        ```bash
-        python3 -m venv venv
-        source venv/bin/activate
-        ```
-3.  Gerekli bağımlılıkları yükleyin:
-    ```bash
-    pip install -r requirements.txt
+    git clone https://github.com/your-username/IIoT-Reciever-Tool.git
+    cd IIoT-Reciever-Tool
     ```
 
-### Uygulamayı Çalıştırma
-
-Sanal ortam etkinleştirildikten sonra, uygulamayı aşağıdaki komutla başlatabilirsiniz:
-
-```bash
-python main.py
-```
-
-## Kullanım
-
-Uygulama başlatıldığında, Modbus, MQTT ve OPC-UA için ayrı sekmeler içeren bir ana pencere göreceksiniz.
-
-*   **Modbus Sekmesi:**
-    *   Bağlantı ayarlarını (IP, Port, Unit ID vb.) girin.
-    *   "Connect" butonuna tıklayarak bağlantıyı kurun.
-    *   İstediğiniz register tipini seçin ve adres aralığını belirterek veri okuma/yazma işlemlerini gerçekleştirin.
-*   **MQTT Sekmesi:**
-    *   Broker adresini ve portunu girin.
-    *   "Connect" butonuna tıklayarak MQTT Broker'a bağlanın.
-    *   "Subscribe" alanına konu (topic) girerek abone olun veya "Publish" alanına konu ve mesaj girerek mesaj yayınlayın.
-*   **OPC UA Sekmesi:**
-    *   OPC UA Sunucu URL'sini girin.
-    *   "Connect" butonuna tıklayarak sunucuya bağlanın.
-    *   Sunucu adres alanını keşfedin ve istediğiniz Node'ları seçerek okuma/yazma veya abone olma işlemlerini yapın.
-
-## Alternatif Çalıştırma (Windows Executable)
-
-Bu uygulamayı, Python veya diğer bağımlılıkları kurmadan doğrudan bir `.exe` dosyası olarak da çalıştırabilirsiniz. Bu, özellikle test veya dağıtım amaçları için kullanışlıdır.
-
-### Hazır Sürümü Kullanma
-
-1.  Projenin GitHub Releases sayfasından en son `.zip` dosyasını indirin.
-2.  İndirdiğiniz arşivi bir klasöre çıkartın.
-3.  `IIoT Reciever Tool.exe` dosyasına çift tıklayarak uygulamayı çalıştırın.
-
-### Kendi Executable Dosyanızı Oluşturma (İsteğe Bağlı)
-
-Eğer kodda değişiklik yaptıysanız ve kendi `.exe` dosyanızı oluşturmak isterseniz, aşağıdaki adımları izleyebilirsiniz:
-
-1.  Öncelikle "Hızlı Başlangıç" bölümündeki adımları izleyerek geliştirme ortamını kurun.
-2.  Sanal ortam aktifken `pyinstaller` paketini yükleyin:
+2.  **Sanal Ortam Oluşturun ve Aktif Edin:**
     ```bash
-    pip install pyinstaller
-    ```
-3.  Projenin ana dizininde aşağıdaki komutu çalıştırarak `.exe` dosyasını oluşturun:
-    ```bash
-    pyinstaller --name "IIoT Reciever Tool" --onefile --windowed --add-data "mainwindow.ui:." --add-data "imgs:imgs" main.py
-    ```
-4.  İşlem tamamlandığında, çalıştırılabilir dosyanız `dist` klasörünün içinde `IIoT Reciever Tool.exe` adıyla oluşturulacaktır.
+    # Windows
+    python -m venv .venv
+    .\.venv\Scripts\activate
 
-## Test Sunucularını Çalıştırma
-
-Uygulamanın protokol yeteneklerini gerçek cihazlar olmadan test etmek için proje içinde basit test sunucuları bulunmaktadır. Bu sunucuları çalıştırmak için, yeni bir terminal açın ve sanal ortamınızın (`venv`) aktif olduğundan emin olun.
-
-*   **Modbus Test Sunucusu:**
-    Basit bir Modbus TCP sunucusu başlatır.
-    ```bash
-    python tests/modbus_test_server.py
+    # Linux / macOS
+    python3 -m venv .venv
+    source .venv/bin/activate
     ```
 
-*   **MQTT Broker:**
-    Lokal bir MQTT broker'ı çalıştırır.
+3.  **Gerekli Kütüphaneleri Yükleyin:**
+    *(Projede bir `requirements.txt` dosyası varsa, `pip install -r requirements.txt` komutunu kullanın. Yoksa, aşağıdaki kütüphaneleri manuel olarak yükleyin.)*
     ```bash
-    python tests/mqtt_live_server.py
+    pip install PyQt6 pyqtgraph asyncua pymodbus paho-mqtt
     ```
 
-*   **OPC-UA Test Sunucusu:**
-    Örnek değişkenler içeren bir OPC-UA sunucusu başlatır.
+4.  **Uygulamayı Çalıştırın:**
+    ```bash
+    python main.py
+    ```
+
+## 🛠️ Test Sunucularını Kullanma
+
+Uygulamanın özelliklerini test etmek için proje içinde hazır test sunucuları bulunmaktadır. Her bir sunucuyu ayrı bir terminalde çalıştırarak uygulamanın ilgili sekmesinden bağlantı kurabilirsiniz.
+
+-   **OPC UA Test Sunucusu:**
     ```bash
     python tests/opcua_test_server.py
     ```
+    Bu sunucu `opc.tcp://127.0.0.1:4840` adresinde çalışır ve 2 saniyede bir güncellenen `Temperature`, `Counter` ve `Status` adında üç değişken yayınlar.
 
-Bu sunucular çalışırken, uygulamadaki varsayılan bağlantı ayarları (örn. `127.0.0.1`, `localhost`) genellikle bu lokal sunuculara bağlanmak için yeterli olacaktır.
+-   **Modbus Test Sunucusu:**
+    ```bash
+    python tests/modbus_test_server.py
+    ```
+    Bu sunucu `127.0.0.4:502` adresinde bir Modbus TCP sunucusu başlatır ve belirli aralıklarla register ve coil değerlerini günceller.
 
-## Proje Yapısı
+-   **MQTT Test Sunucusu (Publisher):**
+    ```bash
+    python tests/mqtt_live_server.py
+    ```
+    Bu sunucu, yerel makinede çalışan bir MQTT broker'ına (`localhost:1883`) 5 saniyede bir `ev/oturma_odasi/sicaklik` konusuna mesaj yayınlar. Test için Mosquitto gibi bir MQTT broker'ını yerel makinenize kurmanız gerekebilir.
 
-```
-IIOT Reciever Software/
-├───main.py                 # Ana uygulama dosyası ve GUI mantığı
-├───mainwindow.ui           # Qt Designer ile oluşturulan ana pencere UI tanımı
-├───requirements.txt        # Python bağımlılıkları
-├───protocols/              # Protokol işleyicileri için modüller
-│   ├───__init__.py
-│   ├───base_handler.py     # Temel protokol işleyici sınıfı
-│   ├───modbus_handler.py   # Modbus TCP/RTU işleme mantığı
-│   ├───mqtt_handler.py     # MQTT istemci işleme mantığı
-│   ├───opc_ua_handler.py   # OPC UA istemci işleme mantığı
-│   └───...
-├───tests/                  # Test sunucuları ve birim testleri
-│   ├───modbus_test_server.py
-│   ├───mqtt_live_server.py
-│   ├───opcua_test_server.py
-├───build/                  # PyInstaller build çıktıları
-├───dist/                   # PyInstaller dağıtım çıktıları
-└───README.md               # Bu README dosyası
-```
+## ⚙️ Yapılandırma (Konfigürasyon)
 
-## Katkıda Bulunma
+Tüm sekmelerdeki IP adresi, port, konu gibi ayarları kalıcı hale getirmek için:
 
-Katkılarınızı memnuniyetle karşılıyorum! Bir hata bulursanız veya yeni bir özellik önermek isterseniz, lütfen bir "issue" açın veya bir "pull request" gönderin.
+1.  Menüden `Dosya > Ayarları Kaydet` seçeneğine tıklayın.
+2.  Ayarlarınızı bir `.json` dosyası olarak kaydedin.
+3.  Daha sonra bu ayarları geri yüklemek için `Dosya > Ayarları Yükle` seçeneğini kullanın.
 
-## Lisans
+---
 
-Bu proje MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın 
+## 🤝 Katkıda Bulunma
+
+Katkılarınız için teşekkürler! Lütfen pull request göndermekten veya issue açmaktan çekinmeyin.

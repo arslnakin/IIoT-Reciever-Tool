@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QThread, pyqtSignal
 from pymodbus.client import ModbusTcpClient, ModbusSerialClient
+from PyQt6.QtWidgets import QTableWidgetItem
 from protocols.base_handler import ProtocolHandlerBase
 import time
 
@@ -147,7 +148,6 @@ class ModbusHandler(ProtocolHandlerBase):
             tw.setItem(row, 3, self._mk_item(bin(val)))
 
     def _mk_item(self, text):
-        from PyQt6.QtWidgets import QTableWidgetItem
         return QTableWidgetItem(text)
 
     def get_status(self) -> str:

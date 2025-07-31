@@ -627,6 +627,91 @@
        </layout>
       </widget>
 
+      <!-- TAB 4 : SCANNER -->
+      <widget class="QWidget" name="scannerTab">
+       <attribute name="title">
+        <string>Scanner</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="scannerLayout">
+
+        <!-- Scan Controls -->
+        <item>
+         <layout class="QHBoxLayout" name="scannerControlLayout">
+          <item>
+           <widget class="QLabel" name="label_scanInfo">
+            <property name="text">
+             <string>Local Network:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="scannerNetworkEdit">
+            <property name="text">
+             <string>192.168.1.0/24</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="scannerScanBtn">
+            <property name="text">
+             <string>Scan Network</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="scannerStopBtn">
+            <property name="text">
+             <string>Stop</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Progress Bar -->
+        <item>
+         <widget class="QProgressBar" name="scannerProgressBar">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+
+        <!-- Results Table -->
+        <item>
+         <widget class="QTableWidget" name="scannerTable">
+          <property name="columnCount">
+           <number>4</number>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>150</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>IP Address</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Port</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Protocol</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+
+       </layout>
+      </widget>
+
      </widget>
     </item>
 

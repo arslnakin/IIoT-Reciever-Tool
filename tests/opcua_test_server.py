@@ -3,10 +3,9 @@ import asyncio
 import random
 import threading
 import time
-import sys
 from asyncua import Server, ua
 
-ENDPOINT = "opc.tcp://127.0.0.1:4841"
+ENDPOINT = "opc.tcp://127.0.0.1:4840"
 NAMESPACE_URI = "http://test.local"
 
 async def run_server():
