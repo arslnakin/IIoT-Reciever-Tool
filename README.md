@@ -3,7 +3,7 @@
 Bu proje, Endüstriyel Nesnelerin İnterneti (IIoT) alanında sıkça kullanılan iletişim protokollerini (OPC UA, Modbus, MQTT) test etmek, izlemek ve veri alışverişi yapmak için geliştirilmiş, PyQt6 tabanlı bir masaüstü uygulamasıdır.
 
 
-*(Buraya uygulamanın bir ekran görüntüsü eklenebilir)*
+![Uygulama Ana Ekranı](/imgs/main_window.png)
 
 ## ✨ Temel Özellikler
 
@@ -15,6 +15,8 @@ Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
     -   Yaygın IIoT portlarının (Modbus: 502, OPC UA: 4840, MQTT: 1883 vb.) açık olup olmadığını tarar.
     -   Bulunan açık portları ve potansiyel servisleri bir tabloda listeler.
 
+    ![Ağ Tarayıcı](/imgs/network_page.png)
+
 -   **📈 OPC UA İstemcisi:**
     -   Bir OPC UA sunucusuna bağlanır.
     -   Sunucunun adres alanını (node'lar) bir ağaç yapısında gezinmenizi sağlar.
@@ -22,16 +24,22 @@ Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
     -   Bir node'a **çift tıklandığında** o node'un değer değişikliklerine abone olur ve gelen veriyi **gerçek zamanlı bir grafikte** çizer.
     -   Seçili node'a yeni bir değer yazma imkanı sunar.
 
+    ![OPC UA İstemcisi](/imgs/opcua_page.png)
+
 -   **🔩 Modbus İstemcisi:**
     -   **Modbus TCP** ve **Modbus RTU** (seri port) protokollerini destekler.
     -   Belirtilen aralıklarla (polling) bir cihazdan veri okur.
     -   Okunan register/coil değerlerini adresleriyle birlikte bir tabloda gösterir (Decimal, Hex, Binary).
+
+    ![Modbus İstemcisi](/imgs/modbus_page.png)
 
 -   **📨 MQTT İstemcisi:**
     -   Bir MQTT Broker'ına bağlanır.
     -   Belirtilen bir konuya (topic) abone olarak gelen mesajları dinler.
     -   Gelen mesajları zaman damgası, konu ve içerik (payload) olarak bir tabloda listeler.
     -   İstenilen bir konuya mesaj yayınlama (publish) imkanı sunar.
+
+    ![MQTT İstemcisi](/imgs/mqtt_page.png)
 
 -   **💾 Yapılandırma Yönetimi:**
     -   Tüm sekmelerdeki bağlantı ayarlarını tek bir JSON dosyasına kaydedebilir ve daha sonra geri yükleyebilirsiniz.
