@@ -74,7 +74,7 @@ Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
     python main.py
 
 
-## Alternatif Çalıştırma(Windondows .exe)
+## Alternatif Çalıştırma
 1.  **Depoyu Klonlayın:**
     ```bash
     git clone https://github.com/your-username/IIoT-Reciever-Tool.git
@@ -92,7 +92,7 @@ Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
     ```
 3.  **Gerekli Kütüphaneleri Yükleyin:**
     ```bash
-    pip install PyQt6 pyqtgraph asyncua pymodbus paho-mqtt pyinstaleer
+    pip install PyQt6 pyqtgraph asyncua pymodbus paho-mqtt pyinstaller
     ```
 4.  **Uygulamayı .exe formatında Sıkıştırın**
     ```bash
