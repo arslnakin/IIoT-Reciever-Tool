@@ -72,7 +72,36 @@ Uygulama, sekmeli bir arayüz üzerinden dört ana modül sunar:
 4.  **Uygulamayı Çalıştırın:**
     ```bash
     python main.py
+
+
+## Alternatif Çalıştırma(Windondows .exe)
+1.  **Depoyu Klonlayın:**
+    ```bash
+    git clone https://github.com/your-username/IIoT-Reciever-Tool.git
+    cd IIoT-Reciever-Tool
     ```
+2.  **Sanal Ortam Oluşturun ve Aktif Edin:**
+    ```bash
+    # Windows
+    python -m venv .venv
+    .\.venv\Scripts\activate
+
+    # Linux / macOS
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+3.  **Gerekli Kütüphaneleri Yükleyin:**
+    ```bash
+    pip install PyQt6 pyqtgraph asyncua pymodbus paho-mqtt pyinstaleer
+    ```
+4.  **Uygulamayı .exe formatında Sıkıştırın**
+    ```bash
+    pyinstaller --onefile --windowed --name "IIoT-Reciever-Tool" --add-data "mainwindow.ui;." --hidden-import "PyQt6" --hidden-import "pyqtgraph" main.py
+    ```
+5.  **Uygulamayı Çalıştırın**
+    ```bash
+    cd IIoT-Reciever-Tool/dist
+    IIoT-Reciever-Tool.exe
 
 ## 🛠️ Test Sunucularını Kullanma
 
