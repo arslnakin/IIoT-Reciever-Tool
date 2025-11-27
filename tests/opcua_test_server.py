@@ -5,7 +5,7 @@ import threading
 import time
 from asyncua import Server, ua
 
-ENDPOINT = "opc.tcp://127.0.0.1:4840"
+ENDPOINT = "opc.tcp://127.0.0.2:4840"
 NAMESPACE_URI = "http://test.local"
 
 async def run_server():
