@@ -5,3 +5,4 @@ asyncua==1.1.5
 pyqtgraph==0.13.7
 pandas==2.2.2
 opcua
+python-snap7

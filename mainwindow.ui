@@ -712,6 +712,330 @@
        </layout>
       </widget>
 
+      <!-- TAB 5 : S7 -->
+       <widget class="QWidget" name="s7Tab">
+        <attribute name="title">
+         <string>S7</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="s7MainLayout">
+         <item>
+          <widget class="QTabWidget" name="s7SubTabWidget">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           
+           <!-- TAB 1: BLOCK READ (Existing) -->
+           <widget class="QWidget" name="s7BlockTab">
+            <attribute name="title">
+             <string>Block Read</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="s7BlockLayout">
+             
+             <!-- Connection Row -->
+             <item>
+              <layout class="QHBoxLayout" name="s7ConnLayout">
+               <item>
+                <widget class="QLabel" name="label_s7_ip">
+                 <property name="text">
+                  <string>IP:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7IpEdit">
+                 <property name="text">
+                  <string>192.168.0.1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_rack">
+                 <property name="text">
+                  <string>Rack:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7RackEdit">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_slot">
+                 <property name="text">
+                  <string>Slot:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7SlotEdit">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_port">
+                 <property name="text">
+                  <string>Port:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7PortEdit">
+                 <property name="text">
+                  <string>102</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="s7ConnectBtn">
+                 <property name="text">
+                  <string>Connect</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+     
+             <!-- Read Settings Row -->
+             <item>
+              <layout class="QHBoxLayout" name="s7ReadSettingsLayout">
+               <item>
+                <widget class="QLabel" name="label_s7_db">
+                 <property name="text">
+                  <string>DB Num:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7DbNumEdit">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_start">
+                 <property name="text">
+                  <string>Start:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7StartEdit">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_size">
+                 <property name="text">
+                  <string>Size:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7SizeEdit">
+                 <property name="text">
+                  <string>10</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_interval">
+                 <property name="text">
+                  <string>Interval (ms):</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7IntervalEdit">
+                 <property name="text">
+                  <string>1000</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+     
+             <!-- Data Output -->
+             <item>
+              <widget class="QLabel" name="label_s7_data">
+               <property name="text">
+                <string>Data (Hex):</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="s7DataOutput">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           
+           <!-- TAB 2: TAG MONITOR (New) -->
+           <widget class="QWidget" name="s7TagTab">
+            <attribute name="title">
+             <string>Tag Monitor</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="s7TagLayout">
+             
+             <!-- Connection Row -->
+             <item>
+              <layout class="QHBoxLayout" name="s7TagConnLayout">
+               <item>
+                <widget class="QLabel" name="label_s7_tag_ip">
+                 <property name="text">
+                  <string>IP:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagIpEdit">
+                 <property name="text">
+                  <string>192.168.0.1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_tag_rack">
+                 <property name="text">
+                  <string>Rack:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagRackEdit">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_tag_slot">
+                 <property name="text">
+                  <string>Slot:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagSlotEdit">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_tag_port">
+                 <property name="text">
+                  <string>Port:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagPortEdit">
+                 <property name="text">
+                  <string>102</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="s7TagConnectBtn">
+                 <property name="text">
+                  <string>Connect</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             
+             <!-- Settings Row -->
+             <item>
+              <layout class="QHBoxLayout" name="s7TagSettingsLayout">
+               <item>
+                <widget class="QLabel" name="label_s7_tag_db">
+                 <property name="text">
+                  <string>DB Num:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagDbNumEdit">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_s7_tag_interval">
+                 <property name="text">
+                  <string>Interval (ms):</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="s7TagIntervalEdit">
+                 <property name="text">
+                  <string>1000</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="s7TagAddRowBtn">
+                 <property name="text">
+                  <string>Add Row</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="s7TagRemoveRowBtn">
+                 <property name="text">
+                  <string>Remove Row</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             
+             <!-- Tag Table -->
+             <item>
+              <widget class="QTableWidget" name="s7TagTable">
+               <property name="columnCount">
+                <number>3</number>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Offset (Byte)</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Value (Dec)</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Description</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             
+            </layout>
+           </widget>
+           
+          </widget>
+         </item>
+        </layout>
+       </widget>
+
      </widget>
     </item>
 

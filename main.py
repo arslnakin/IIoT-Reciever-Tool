@@ -8,12 +8,22 @@ from protocols.modbus_handler import ModbusHandler
 from protocols.mqtt_handler import MqttHandler
 from protocols.opc_ua_handler import OpcUaHandler
 from protocols.scanner_handler import ScannerHandler
+from protocols.s7_handler import S7Handler, S7TagHandler
 
 Ui_MainWindow, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), "mainwindow.ui"))
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        
+        # PyInstaller onefile fix for finding DLLs
+        if getattr(sys, 'frozen', False):
+            # If the application is run as a bundle, the PyInstaller bootloader
+            # extends the sys module by a flag frozen=True and sets the app 
+            # path into variable _MEIPASS'.
+            application_path = sys._MEIPASS
+            os.environ['PATH'] = application_path + os.pathsep + os.environ['PATH']
+        
         self.setupUi(self)
 
         # Protokol handler'ları
@@ -21,6 +31,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.mqtt_handler   = MqttHandler(self)
         self.opcua_handler  = OpcUaHandler(self)
         self.scanner_handler = ScannerHandler(self)
+        self.s7_handler = S7Handler(self)
+        self.s7_tag_handler = S7TagHandler(self)
 
         # OPC-UA Plotting
         self.opcua_plot_data_x = []
@@ -43,6 +55,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.mqtt_handler.log_message.connect(self.append_log)
         self.opcua_handler.log_message.connect(self.append_log)
         self.scanner_handler.log_message.connect(self.append_log)
+        self.s7_handler.log_message.connect(self.append_log)
+        self.s7_tag_handler.log_message.connect(self.append_log)
 
         # UI Ayarları
         self.opcuaValueEdit.setReadOnly(True)
@@ -58,7 +72,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "modbus": self.modbus_handler.serialize(),
                 "mqtt"  : self.mqtt_handler.serialize(),
                 "opcua" : self.opcua_handler.serialize(),
-                "scanner": self.scanner_handler.serialize()
+                "scanner": self.scanner_handler.serialize(),
+                "s7": self.s7_handler.serialize(),
+                "s7_tag": self.s7_tag_handler.serialize()
             }
             with open(file, "w", encoding="utf-8") as f:
                 json.dump(cfg, f, indent=2)
@@ -73,6 +89,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.mqtt_handler.deserialize(cfg.get("mqtt", {}))
             self.opcua_handler.deserialize(cfg.get("opcua", {}))
             self.scanner_handler.deserialize(cfg.get("scanner", {}))
+            self.s7_handler.deserialize(cfg.get("s7", {}))
+            self.s7_tag_handler.deserialize(cfg.get("s7_tag", {}))
             QMessageBox.information(self, "Bilgi", "Ayarlar yüklendi.")
 
     def update_opcua_tree_view(self, model):
