@@ -9,6 +9,9 @@ from protocols.mqtt_handler import MqttHandler
 from protocols.opc_ua_handler import OpcUaHandler
 from protocols.scanner_handler import ScannerHandler
 from protocols.s7_handler import S7Handler, S7TagHandler
+from protocols.gateway_handler import GatewayHandler
+from protocols.dashboard_handler import DashboardHandler
+from utils.logger import DataLogger
 
 Ui_MainWindow, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), "mainwindow.ui"))
 
@@ -26,6 +29,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.setupUi(self)
 
+        # Logger
+        self.data_logger = DataLogger()
+        self.data_logger.log_message.connect(self.append_log)
+
         # Protokol handler'ları
         self.modbus_handler = ModbusHandler(self)
         self.mqtt_handler   = MqttHandler(self)
@@ -33,6 +40,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.scanner_handler = ScannerHandler(self)
         self.s7_handler = S7Handler(self)
         self.s7_tag_handler = S7TagHandler(self)
+        
+        # Gateway Handler
+        self.gateway_handler = GatewayHandler(self)
+        self.gateway_handler.log_message.connect(self.append_log)
+
+        # Dashboard Handler
+        self.dashboard_handler = DashboardHandler(self)
+        self.dashboard_handler.log_message.connect(self.append_log)
+
+        # Connect Data Signals to Logger, Gateway, and Dashboard
+        self.s7_tag_handler.data_received.connect(self.data_logger.log)
+        self.s7_tag_handler.data_received.connect(self.gateway_handler.process_data)
+        self.s7_tag_handler.data_received.connect(self.dashboard_handler.update_value)
+        
+        # Add other handlers here when they support data_received
 
         # OPC-UA Plotting
         self.opcua_plot_data_x = []
@@ -43,6 +65,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Menü aksiyonları
         self.actionSave.triggered.connect(self.save_config)
         self.actionLoad.triggered.connect(self.load_config)
+        
+        # Logging Menu
+        self.menuLogging = self.menubar.addMenu("Logging")
+        self.actionStartLogging = self.menuLogging.addAction("Start Logging")
+        self.actionStopLogging = self.menuLogging.addAction("Stop Logging")
+        
+        self.actionStartLogging.triggered.connect(self.start_logging)
+        self.actionStopLogging.triggered.connect(self.stop_logging)
+
+        # View Menu (Dark Mode)
+        self.menuView = self.menubar.addMenu("View")
+        self.actionToggleDarkMode = self.menuView.addAction("Toggle Dark Mode")
+        self.actionToggleDarkMode.setCheckable(True)
+        self.actionToggleDarkMode.triggered.connect(self.toggle_dark_mode)
 
         # OPC-UA Buton Bağlantıları
         self.opcuaConnectBtn.clicked.connect(self.connect_opcua)
@@ -64,6 +100,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def append_log(self, text):
         self.logEdit.append(text)
 
+    def start_logging(self):
+        file, _ = QFileDialog.getSaveFileName(self, "Save Log File", "", "CSV Files (*.csv)")
+        if file:
+            self.data_logger.start(file)
+
+    def stop_logging(self):
+        self.data_logger.stop()
+
+    def toggle_dark_mode(self, checked):
+        app = QApplication.instance()
+        if checked:
+            # Dark Mode Palette
+            from PyQt6.QtGui import QPalette, QColor
+            palette = QPalette()
+            palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
+            palette.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
+            palette.setColor(QPalette.ColorRole.Base, QColor(25, 25, 25))
+            palette.setColor(QPalette.ColorRole.AlternateBase, QColor(53, 53, 53))
+            palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(255, 255, 255))
+            palette.setColor(QPalette.ColorRole.ToolTipText, QColor(255, 255, 255))
+            palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255))
+            palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
+            palette.setColor(QPalette.ColorRole.ButtonText, QColor(255, 255, 255))
+            palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
+            palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
+            palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
+            palette.setColor(QPalette.ColorRole.HighlightedText, QColor(0, 0, 0))
+            app.setPalette(palette)
+            app.setStyle("Fusion")
+        else:
+            # Restore Default
+            app.setPalette(QApplication.style().standardPalette())
+            app.setStyle("Windows")
+
     # ---------- Konfigürasyon ----------
     def save_config(self):
         file, _ = QFileDialog.getSaveFileName(self, "Konfigürasyon Kaydet", "", "JSON (*.json)")
@@ -74,7 +144,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "opcua" : self.opcua_handler.serialize(),
                 "scanner": self.scanner_handler.serialize(),
                 "s7": self.s7_handler.serialize(),
-                "s7_tag": self.s7_tag_handler.serialize()
+                "s7_tag": self.s7_tag_handler.serialize(),
+                "gateway": self.gateway_handler.serialize(),
+                "dashboard": self.dashboard_handler.serialize()
             }
             with open(file, "w", encoding="utf-8") as f:
                 json.dump(cfg, f, indent=2)
@@ -91,6 +163,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.scanner_handler.deserialize(cfg.get("scanner", {}))
             self.s7_handler.deserialize(cfg.get("s7", {}))
             self.s7_tag_handler.deserialize(cfg.get("s7_tag", {}))
+            self.gateway_handler.deserialize(cfg.get("gateway", {}))
+            self.dashboard_handler.deserialize(cfg.get("dashboard", {}))
             QMessageBox.information(self, "Bilgi", "Ayarlar yüklendi.")
 
     def update_opcua_tree_view(self, model):

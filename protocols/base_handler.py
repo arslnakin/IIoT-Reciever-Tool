@@ -6,6 +6,7 @@ class QObjectABCMeta(type(QObject), ABCMeta):
 
 class ProtocolHandlerBase(QObject, ABC, metaclass=QObjectABCMeta):
     log_message = pyqtSignal(str)
+    data_received = pyqtSignal(str, str, object) # protocol, tag, value
 
     def __init__(self, ui):
         super().__init__()

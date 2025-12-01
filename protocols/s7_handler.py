@@ -163,10 +163,14 @@ class S7TagHandler(ProtocolHandlerBase):
         self.ui.s7TagAddRowBtn.clicked.connect(self.add_row)
         self.ui.s7TagRemoveRowBtn.clicked.connect(self.remove_row)
         
+        # Check if import button exists (it was added dynamically to UI file)
+        if hasattr(self.ui, 's7TagImportBtn'):
+            self.ui.s7TagImportBtn.clicked.connect(self.import_tags)
+        
         # Setup Table
         self.table = self.ui.s7TagTable
-        self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(["Offset", "Type", "Value", "Description"])
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels(["Offset", "Type", "Value", "Write Value", "Action", "Description"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
 
     def ensure_client(self):
@@ -231,7 +235,7 @@ class S7TagHandler(ProtocolHandlerBase):
         self.timer.stop()
 
     def add_row(self):
-        from PyQt6.QtWidgets import QComboBox
+        from PyQt6.QtWidgets import QComboBox, QPushButton, QLineEdit
         row = self.table.rowCount()
         self.table.insertRow(row)
         
@@ -243,16 +247,149 @@ class S7TagHandler(ProtocolHandlerBase):
         combo.addItems(["Bool", "Byte", "Int", "Word", "DInt", "DWord", "Real"])
         self.table.setCellWidget(row, 1, combo)
         
-        # Value
-        self.table.setItem(row, 2, QTableWidgetItem("-"))
+        # Value (Read-only)
+        item_val = QTableWidgetItem("-")
+        item_val.setFlags(item_val.flags() ^ QtCore.Qt.ItemFlag.ItemIsEditable)
+        self.table.setItem(row, 2, item_val)
+
+        # Write Value (Editable)
+        self.table.setItem(row, 3, QTableWidgetItem("0"))
+
+        # Write Button
+        btn = QPushButton("Write")
+        btn.clicked.connect(lambda _, r=row: self.write_tag(r))
+        self.table.setCellWidget(row, 4, btn)
         
         # Description
-        self.table.setItem(row, 3, QTableWidgetItem(""))
+        self.table.setItem(row, 5, QTableWidgetItem(""))
 
     def remove_row(self):
         row = self.table.currentRow()
         if row >= 0:
             self.table.removeRow(row)
+
+    def import_tags(self):
+        from PyQt6.QtWidgets import QFileDialog
+        import csv
+        
+        file, _ = QFileDialog.getOpenFileName(self.ui, "Import Tags", "", "CSV Files (*.csv);;All Files (*.*)")
+        if not file:
+            return
+            
+        try:
+            with open(file, newline='', encoding='utf-8') as csvfile:
+                reader = csv.reader(csvfile)
+                # Optional: Skip header if present. Simple heuristic: check if first col is "Offset"
+                rows = list(reader)
+                if not rows:
+                    return
+                    
+                if rows[0][0].lower() == "offset":
+                    rows = rows[1:]
+                
+                for row_data in rows:
+                    if len(row_data) < 2:
+                        continue
+                        
+                    offset = row_data[0]
+                    dtype = row_data[1]
+                    desc = row_data[2] if len(row_data) > 2 else ""
+                    
+                    self.add_row()
+                    row_idx = self.table.rowCount() - 1
+                    
+                    self.table.setItem(row_idx, 0, QTableWidgetItem(offset))
+                    
+                    combo = self.table.cellWidget(row_idx, 1)
+                    if combo:
+                        # Find closest match for type
+                        index = combo.findText(dtype, QtCore.Qt.MatchFlag.MatchContains)
+                        if index >= 0:
+                            combo.setCurrentIndex(index)
+                        else:
+                            # Default or try to guess
+                            pass
+                            
+                    self.table.setItem(row_idx, 5, QTableWidgetItem(desc))
+                    
+            self.log_message.emit(f"Imported {len(rows)} tags from {file}")
+            
+        except Exception as e:
+            self.log_message.emit(f"Import Error: {e}")
+
+    def write_tag(self, row):
+        if not self.connected:
+            self.log_message.emit("S7 Write Error: Not connected.")
+            return
+
+        try:
+            db_number = int(self.ui.s7TagDbNumEdit.text())
+        except ValueError:
+            self.log_message.emit("S7 Write Error: Invalid DB Number.")
+            return
+
+        offset_item = self.table.item(row, 0)
+        write_val_item = self.table.item(row, 3)
+        combo = self.table.cellWidget(row, 1)
+
+        if not offset_item or not write_val_item or not combo:
+            return
+
+        offset_str = offset_item.text()
+        dtype = combo.currentText()
+        write_val_str = write_val_item.text()
+
+        import struct
+
+        try:
+            # Parse offset
+            byte_offset = 0
+            bit_offset = 0
+            if '.' in offset_str:
+                parts = offset_str.split('.')
+                byte_offset = int(parts[0])
+                if len(parts) > 1:
+                    bit_offset = int(parts[1])
+            else:
+                byte_offset = int(offset_str)
+
+            # Prepare data buffer
+            data = bytearray()
+            
+            if dtype == "Bool":
+                # For Bool, we need to read the byte first, modify the bit, and write back
+                # Or use write_area? snap7 has set_bool but it works on a buffer.
+                # Let's read 1 byte first to be safe and not overwrite other bits
+                current_byte = self.client.db_read(db_number, byte_offset, 1)
+                val_bool = (write_val_str.lower() in ['true', '1', 'on'])
+                snap7.util.set_bool(current_byte, 0, bit_offset, val_bool)
+                data = current_byte
+            elif dtype == "Byte":
+                val = int(write_val_str)
+                data = bytearray([val])
+            elif dtype == "Int":
+                val = int(write_val_str)
+                data = struct.pack('>h', val)
+            elif dtype == "Word":
+                val = int(write_val_str, 16) # Assume Hex input for Word
+                data = struct.pack('>H', val)
+            elif dtype == "DInt":
+                val = int(write_val_str)
+                data = struct.pack('>i', val)
+            elif dtype == "DWord":
+                val = int(write_val_str, 16) # Assume Hex input for DWord
+                data = struct.pack('>I', val)
+            elif dtype == "Real":
+                val = float(write_val_str)
+                data = struct.pack('>f', val)
+
+            # Write to DB
+            self.client.db_write(db_number, byte_offset, data)
+            self.log_message.emit(f"S7 Write Success: Row {row+1} -> {write_val_str}")
+            
+        except Exception as e:
+            self.log_message.emit(f"S7 Write Error: {e}")
+
 
     def read_tags(self):
         if not self.connected:
@@ -327,6 +464,7 @@ class S7TagHandler(ProtocolHandlerBase):
                     val_str = f"{val:.4f}"
                 
                 self.table.setItem(row, 2, QTableWidgetItem(val_str))
+                self.data_received.emit("S7", f"DB{db_number}.{offset_str}", val_str)
                 
             except Exception as e:
                 self.table.setItem(row, 2, QTableWidgetItem("Err"))
@@ -343,7 +481,7 @@ class S7TagHandler(ProtocolHandlerBase):
             combo = self.table.cellWidget(row, 1)
             dtype = combo.currentText() if combo else "Byte"
             
-            desc = self.table.item(row, 3).text() if self.table.item(row, 3) else ""
+            desc = self.table.item(row, 5).text() if self.table.item(row, 5) else ""
             tags.append({"offset": off, "type": dtype, "desc": desc})
             
         return {
@@ -375,4 +513,4 @@ class S7TagHandler(ProtocolHandlerBase):
             if combo:
                 combo.setCurrentText(t.get("type", "Byte"))
                 
-            self.table.setItem(row, 3, QTableWidgetItem(t.get("desc", "")))
+            self.table.setItem(row, 5, QTableWidgetItem(t.get("desc", "")))

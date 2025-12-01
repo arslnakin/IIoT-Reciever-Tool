@@ -1001,6 +1001,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="s7TagImportBtn">
+                 <property name="text">
+                  <string>Import Tags</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
              
